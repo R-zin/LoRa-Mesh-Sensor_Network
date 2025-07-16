@@ -1,16 +1,22 @@
 #include <RadioLib.h>
 #include <SPI.h>
 
-#define MASTER_SYNC_NODE_ID  // This can dynamically change by 
 #define CURRENT_NODE_ID  //add node number here
 
 #define SLOT_DURATION 200
 #define TOTAL_NODES  //total no of nodes in the mesh Network
 #define RESYNC_TIME 5000 // after how much time does the node have to send the resync
 
-
+unsigned long last_sync = 0;
 
 SX1262 LoRa = new Module(7,6,4,5,SPI); // pins are set to default of LR1262 module
+
+void Syncing_send_master(unsigned long current_node_time) {
+  String sync_payload = "SYNC:" + String(current_node_time);
+  Serial.println("Sending SYNC Packet @ " + current_node_time);
+  LoRa.finishTransmit();
+  LoRa.startTransmit(str);
+}
 
 void setup() {
   Serial.begin(9600);
@@ -30,5 +36,9 @@ void setup() {
   }
 }
 void loop() {
-
+  unsigned long current_time = millis();
+  if (curent_time - last_sync >= RESYNC_TIME) {
+    Syncing_send_master(current_time);
+  }
+  last_sync = current_time;
 }
