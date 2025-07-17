@@ -15,7 +15,7 @@ void Syncing_send_master(unsigned long current_node_time) {
   String sync_payload = "SYNC:" + String(current_node_time);
   Serial.println("Sending SYNC Packet @ " + current_node_time);
   LoRa.finishTransmit();
-  LoRa.startTransmit(str);
+  LoRa.startTransmit(sync_payload);
 }
 
 void setup() {
