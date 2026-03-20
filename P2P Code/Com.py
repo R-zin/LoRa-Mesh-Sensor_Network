@@ -43,9 +43,11 @@ class Net:
         self.con.send(data)
     def Test(self):
         Test.Extended_response_test()
+    def baud_test(self):
+        Test.baud_rate_test()
 
 Mod = Net(868,1,10,True,2400,False)
-Mod.Test()
+Mod.baud_test()
 
 
 
