@@ -1,4 +1,5 @@
 import sx126x
+import Test
 import time
 class Net:
     con : sx126x.sx126x
@@ -33,13 +34,18 @@ class Net:
         freq_byte = freq - self.con.start_freq
         data = bytes([high_addr,low_addr,freq_byte]) + payload.encode()
         self.con.send(data)
+        print(f"Data sent Successfully Data: {data}")
     def broadcast(self,freq:int,payload:str):  #Used for Broadcasting
         high_addr = self.BROADCAST_ADDR >> 8 & 0xFF
         low_addr = self.BROADCAST_ADDR & 0xFF
         freq_byte = freq - self.con.start_freq
         data = bytes([high_addr, low_addr, freq_byte]) + payload.encode()
         self.con.send(data)
+    def Test(self):
+        Test.Simple_response_test()
 
+Mod = Net(868,1,10,True,2400,False)
+Mod.Test()
 
 
 
