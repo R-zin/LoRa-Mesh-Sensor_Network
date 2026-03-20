@@ -42,7 +42,7 @@ class Net:
         data = bytes([high_addr, low_addr, freq_byte]) + payload.encode()
         self.con.send(data)
     def Test(self):
-        Test.Simple_response_test()
+        Test.Extended_response_test()
 
 Mod = Net(868,1,10,True,2400,False)
 Mod.Test()
