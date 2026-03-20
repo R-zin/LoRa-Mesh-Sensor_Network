@@ -51,3 +51,55 @@ def Extended_response_test():
 
     ser.close()
     GPIO.cleanup()
+def baud_rate_test():
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setwarnings(False)
+    GPIO.setup(22, GPIO.OUT)
+    GPIO.setup(27, GPIO.OUT)
+
+    # Reset first
+    GPIO.output(22, GPIO.LOW)
+    GPIO.output(27, GPIO.LOW)
+    time.sleep(1)
+
+    # Config mode
+    GPIO.output(22, GPIO.LOW)
+    GPIO.output(27, GPIO.HIGH)
+    time.sleep(2)
+
+    BAUD_RATES = [115200, 57600, 38400, 19200, 9600, 4800, 2400, 1200]
+
+    for baud in BAUD_RATES:
+        print(f"\nTrying: {baud}")
+        try:
+            ser = serial.Serial(
+                port="/dev/ttyS0",
+                baudrate=baud,
+                timeout=2
+            )
+            ser.flushInput()
+            time.sleep(0.5)
+
+            ser.write(bytes([0xC1, 0x00, 0x09]))
+            time.sleep(1)
+
+            if ser.inWaiting() > 0:
+                response = ser.read(ser.inWaiting())
+                print(f"HEX : {response.hex()}")
+                print(f"RAW : {list(response)}")
+
+                if response[0] == 0xC1 and len(response) == 12:
+                    print(f"✅ FOUND! Correct baud rate: {baud}")
+                    break
+                else:
+                    print(f"❌ Wrong at {baud}")
+            else:
+                print(f"❌ No response at {baud}")
+
+            ser.close()
+            time.sleep(0.5)
+
+        except Exception as e:
+            print(f"Error: {e}")
+
+    GPIO.cleanup()
