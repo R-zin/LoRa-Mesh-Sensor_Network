@@ -6,7 +6,7 @@ def Simple_response_test():
     GPIO.setup(22, GPIO.OUT)  # M0
     GPIO.setup(27, GPIO.OUT)  # M1
 
-    # put in config mode
+    #
     GPIO.output(22, GPIO.LOW)
     GPIO.output(27, GPIO.HIGH)
 
@@ -19,3 +19,4 @@ def Simple_response_test():
         print("Waveshare SX1262 responding  :", ser.read(ser.inWaiting()).hex())
     else:
         print("No response — check connections ")
+Simple_response_test()
